@@ -1,0 +1,12 @@
+agency_swarm
+openai>=1.0.0
+python-dotenv
+tavily-python
+nltk>=3.8.1
+pytrends>=4.9.0
+pandas
+google-api-python-client
+textblob
+urllib3==1.26.6  # Specific version for pytrends compatibility
+pyreadline3; platform_system=="Windows"  # For Windows systems only 
+gradio

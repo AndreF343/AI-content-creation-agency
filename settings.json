@@ -1,0 +1,376 @@
+[
+    {
+        "id": "asst_GjYGiwtqBqU3U1GGCLZ5gXTy",
+        "created_at": 1736682620,
+        "description": "Manages content ideation and script creation process",
+        "instructions": "agency_manifesto.md\n\n# Agent Role\n\nI am the Content Manager, responsible for generating and refining content ideas based on trend analysis and performance data. I coordinate with the Trend Analyzer and YouTube Analyzer to ensure content aligns with current trends and audience interests.\n\n# Goals\n\n1. Generate high-quality content ideas that align with current AI trends\n2. Create engaging scripts that resonate with the target audience\n3. Optimize content based on performance data and audience feedback\n4. Maintain consistency in content quality and messaging\n5. Identify and capitalize on content gaps in the market\n\n# Process Workflow\n\n1. Request and analyze YouTube performance data from the YouTube Analyzer\n   - Review channel metrics\n   - Analyze top-performing content\n   - Understand audience demographics and preferences\n\n2. Request and analyze trend data from the Trend Analyzer\n   - Review current AI trends\n   - Identify emerging topics\n   - Analyze keyword performance\n\n3. Generate Content Ideas\n   - Combine insights from trend and performance analysis\n   - Generate multiple content concepts\n   - Evaluate potential impact and relevance\n\n4. Present Ideas to User\n   - Share top content ideas with detailed rationale\n   - Include potential impact metrics\n   - Await user selection\n\n5. Create Script Draft\n   - Develop detailed outline\n   - Write initial script\n   - Include key talking points and references\n\n6. Refine and Finalize\n   - Incorporate user feedback\n   - Edit for clarity and engagement\n   - Finalize script structure ",
+        "metadata": {},
+        "model": "gpt-4o-2024-08-06",
+        "name": "Content Manager",
+        "object": "assistant",
+        "tools": [
+            {
+                "function": {
+                    "name": "ContentIdeaGenerator",
+                    "description": "Generates content ideas using OpenAI's latest model based on trends and performance data.",
+                    "parameters": {
+                        "properties": {
+                            "trends_data": {
+                                "description": "Trend analysis data from the Trend Analyzer",
+                                "title": "Trends Data",
+                                "type": "string"
+                            },
+                            "youtube_data": {
+                                "description": "YouTube performance data from the YouTube Analyzer",
+                                "title": "Youtube Data",
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "trends_data",
+                            "youtube_data"
+                        ],
+                        "type": "object"
+                    },
+                    "strict": false
+                },
+                "type": "function"
+            },
+            {
+                "function": {
+                    "name": "ScriptWriter",
+                    "description": "Writes and saves script drafts in Markdown format.",
+                    "parameters": {
+                        "properties": {
+                            "title": {
+                                "description": "Title of the content",
+                                "title": "Title",
+                                "type": "string"
+                            },
+                            "outline": {
+                                "description": "Detailed outline of the script",
+                                "title": "Outline",
+                                "type": "string"
+                            },
+                            "target_audience": {
+                                "description": "Target audience for the content",
+                                "title": "Target Audience",
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "outline",
+                            "target_audience",
+                            "title"
+                        ],
+                        "type": "object"
+                    },
+                    "strict": false
+                },
+                "type": "function"
+            },
+            {
+                "function": {
+                    "name": "SendMessage",
+                    "description": "Correctly extracted `SendMessage` with all the required parameters with correct types",
+                    "parameters": {
+                        "$defs": {
+                            "recipient": {
+                                "enum": [
+                                    "Trend Analyzer",
+                                    "YouTube Analyzer"
+                                ],
+                                "title": "recipient",
+                                "type": "string"
+                            }
+                        },
+                        "properties": {
+                            "recipient": {
+                                "allOf": [
+                                    {
+                                        "$ref": "#/$defs/recipient"
+                                    }
+                                ],
+                                "description": "Trend Analyzer: Analyzes AI trends and identifies content opportunities\nYouTube Analyzer: Analyzes YouTube performance and content gaps\n"
+                            },
+                            "my_primary_instructions": {
+                                "description": "Please repeat your primary instructions step-by-step, including both completed and the following next steps that you need to perform. For multi-step, complex tasks, first break them down into smaller steps yourself. Then, issue each step individually to the recipient agent via the message parameter. Each identified step should be sent in a separate message. Keep in mind that the recipient agent does not have access to these instructions. You must include recipient agent-specific instructions in the message or in the additional_instructions parameters.",
+                                "title": "My Primary Instructions",
+                                "type": "string"
+                            },
+                            "message": {
+                                "description": "Specify the task required for the recipient agent to complete. Focus on clarifying what the task entails, rather than providing exact instructions. Make sure to inlcude all the relevant information from the conversation needed to complete the task.",
+                                "title": "Message",
+                                "type": "string"
+                            },
+                            "message_files": {
+                                "anyOf": [
+                                    {
+                                        "items": {
+                                            "type": "string"
+                                        },
+                                        "type": "array"
+                                    },
+                                    {
+                                        "type": "null"
+                                    }
+                                ],
+                                "default": null,
+                                "description": "A list of file IDs to be sent as attachments to this message. Only use this if you have the file ID that starts with 'file-'.",
+                                "examples": [
+                                    "file-1234",
+                                    "file-5678"
+                                ],
+                                "title": "Message Files"
+                            },
+                            "additional_instructions": {
+                                "anyOf": [
+                                    {
+                                        "type": "string"
+                                    },
+                                    {
+                                        "type": "null"
+                                    }
+                                ],
+                                "default": null,
+                                "description": "Additional context or instructions from the conversation needed by the recipient agent to complete the task.",
+                                "title": "Additional Instructions"
+                            }
+                        },
+                        "required": [
+                            "message",
+                            "my_primary_instructions",
+                            "recipient"
+                        ],
+                        "type": "object"
+                    },
+                    "strict": false
+                },
+                "type": "function"
+            }
+        ],
+        "response_format": "auto",
+        "temperature": 0.7,
+        "tool_resources": {
+            "code_interpreter": null,
+            "file_search": null
+        },
+        "top_p": 1.0
+    },
+    {
+        "id": "asst_cy2Fu0X06MuGhpPi0xUkvY0k",
+        "created_at": 1736682621,
+        "description": "Analyzes AI trends and identifies content opportunities",
+        "instructions": "agency_manifesto.md\n\n# Agent Role\n\nI am the Trend Analyzer, responsible for identifying and analyzing current AI trends, emerging topics, and content opportunities. I use various tools to gather and analyze data from multiple sources to provide comprehensive trend insights.\n\n# Goals\n\n1. Identify emerging AI trends and topics\n2. Analyze keyword performance and search patterns\n3. Discover content gaps and opportunities\n4. Track trend evolution and predict future trends\n5. Provide actionable insights for content creation\n\n# Process Workflow\n\n1. Gather Trend Data\n   - Use Tavily API to search for latest AI developments\n   - Monitor tech news and industry updates\n   - Track emerging discussions and topics\n\n2. Extract and Analyze Keywords\n   - Process articles and content using NLTK\n   - Identify key terms and phrases\n   - Analyze keyword relationships and contexts\n\n3. Analyze Trend Patterns\n   - Use Google Trends to track interest over time\n   - Identify seasonal patterns\n   - Monitor related queries and topics\n\n4. Compile Analysis Report\n   - Summarize key findings\n   - Highlight potential content opportunities\n   - Provide supporting data and metrics\n\n5. Share Insights\n   - Send comprehensive report to Content Manager\n   - Highlight urgent or significant trends\n   - Provide recommendations for content strategy ",
+        "metadata": {},
+        "model": "gpt-4o-2024-08-06",
+        "name": "Trend Analyzer",
+        "object": "assistant",
+        "tools": [
+            {
+                "function": {
+                    "name": "KeywordExtractor",
+                    "description": "Extracts keywords from news articles using NLTK.",
+                    "parameters": {
+                        "properties": {
+                            "text": {
+                                "description": "Article text to analyze",
+                                "title": "Text",
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "text"
+                        ],
+                        "type": "object"
+                    },
+                    "strict": false
+                },
+                "type": "function"
+            },
+            {
+                "function": {
+                    "name": "TavilySearchTool",
+                    "description": "Searches the web for AI trends using Tavily API.",
+                    "parameters": {
+                        "properties": {
+                            "query": {
+                                "description": "Search query for AI trends",
+                                "title": "Query",
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "query"
+                        ],
+                        "type": "object"
+                    },
+                    "strict": false
+                },
+                "type": "function"
+            },
+            {
+                "function": {
+                    "name": "TrendAnalyzer",
+                    "description": "Analyzes trending topics using YouTube API.",
+                    "parameters": {
+                        "properties": {
+                            "keywords": {
+                                "description": "List of keywords/topics to analyze",
+                                "items": {},
+                                "title": "Keywords",
+                                "type": "array"
+                            },
+                            "max_results": {
+                                "default": 10,
+                                "description": "Maximum number of videos to analyze per keyword",
+                                "title": "Max Results",
+                                "type": "integer"
+                            }
+                        },
+                        "required": [
+                            "keywords"
+                        ],
+                        "type": "object"
+                    },
+                    "strict": false
+                },
+                "type": "function"
+            }
+        ],
+        "response_format": "auto",
+        "temperature": 0.5,
+        "tool_resources": {
+            "code_interpreter": null,
+            "file_search": null
+        },
+        "top_p": 1.0
+    },
+    {
+        "id": "asst_lWsVym2UCfDdMmRR2IbdrOCo",
+        "created_at": 1736682621,
+        "description": "Analyzes YouTube performance and content gaps",
+        "instructions": "agency_manifesto.md\n\n# Agent Role\n\nI am the YouTube Analyzer, responsible for analyzing channel performance, content gaps, and competitor analysis to inform content strategy. I focus on data-driven insights to identify opportunities and trends.\n\n# Goals\n\n1. Analyze channel demographics and performance metrics\n2. Identify successful content patterns and topics\n3. Research and analyze competitor strategies\n4. Discover content gaps and opportunities\n5. Provide actionable insights for content creation\n\n# Process Workflow\n\n1. Channel Demographics Analysis\n   - Analyze my channel (UCv2KxkHBzmaT1K3LahubXzA) demographics\n   - Review subscriber growth and engagement metrics\n   - Identify audience preferences and patterns\n\n2. Video Performance Analysis\n   - Analyze recent video performance\n   - Track engagement metrics (views, likes, comments)\n   - Identify top-performing content types\n\n3. Topic Research\n   - Search for trending topics in AI/tech\n   - Analyze search volumes and competition\n   - Identify high-potential content areas\n\n4. Competitor Analysis\n   - Research channels in identified topic areas\n   - Analyze their content strategy\n   - Track their performance metrics\n\n5. Content Gap Analysis\n   - Compare our content with competitors\n   - Identify underserved topics\n   - Spot opportunities for differentiation\n\n6. Report Compilation\n   - Summarize key findings\n   - Highlight opportunities\n   - Provide actionable recommendations ",
+        "metadata": {},
+        "model": "gpt-4o-2024-08-06",
+        "name": "YouTube Analyzer",
+        "object": "assistant",
+        "tools": [
+            {
+                "function": {
+                    "name": "ChannelAnalyzer",
+                    "description": "Analyzes YouTube channel performance and demographics.",
+                    "parameters": {
+                        "properties": {
+                            "channel_id": {
+                                "description": "YouTube channel ID to analyze",
+                                "title": "Channel Id",
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "channel_id"
+                        ],
+                        "type": "object"
+                    },
+                    "strict": false
+                },
+                "type": "function"
+            },
+            {
+                "function": {
+                    "name": "ChannelPerformanceAnalyzer",
+                    "description": "Analyzes channel demographics and video performance.",
+                    "parameters": {
+                        "properties": {
+                            "channel_id": {
+                                "description": "YouTube channel ID to analyze",
+                                "title": "Channel Id",
+                                "type": "string"
+                            },
+                            "video_limit": {
+                                "default": 10,
+                                "description": "Number of recent videos to analyze",
+                                "title": "Video Limit",
+                                "type": "integer"
+                            }
+                        },
+                        "required": [
+                            "channel_id"
+                        ],
+                        "type": "object"
+                    },
+                    "strict": false
+                },
+                "type": "function"
+            },
+            {
+                "function": {
+                    "name": "CompetitorAnalyzer",
+                    "description": "Analyzes competitor channels and their content performance.",
+                    "parameters": {
+                        "properties": {
+                            "keywords": {
+                                "description": "Keyword to search for in the competitor's content",
+                                "title": "Keywords",
+                                "type": "string"
+                            },
+                            "max_results": {
+                                "default": 5,
+                                "description": "Maximum number of channels to analyze",
+                                "title": "Max Results",
+                                "type": "integer"
+                            },
+                            "videos_per_channel": {
+                                "default": 5,
+                                "description": "Number of videos to analyze per channel",
+                                "title": "Videos Per Channel",
+                                "type": "integer"
+                            }
+                        },
+                        "required": [
+                            "keywords"
+                        ],
+                        "type": "object"
+                    },
+                    "strict": false
+                },
+                "type": "function"
+            },
+            {
+                "function": {
+                    "name": "SentimentAnalyzer",
+                    "description": "Analyzes sentiment and engagement in video comments.",
+                    "parameters": {
+                        "properties": {
+                            "video_id": {
+                                "description": "YouTube video ID to analyze comments from",
+                                "title": "Video Id",
+                                "type": "string"
+                            },
+                            "max_comments": {
+                                "default": 100,
+                                "description": "Maximum number of comments to analyze",
+                                "title": "Max Comments",
+                                "type": "integer"
+                            }
+                        },
+                        "required": [
+                            "video_id"
+                        ],
+                        "type": "object"
+                    },
+                    "strict": false
+                },
+                "type": "function"
+            }
+        ],
+        "response_format": "auto",
+        "temperature": 0.5,
+        "tool_resources": {
+            "code_interpreter": null,
+            "file_search": null
+        },
+        "top_p": 1.0
+    }
+]
